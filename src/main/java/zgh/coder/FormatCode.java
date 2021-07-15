@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 public class FormatCode {
 
 	public static void main(String[] args) {
-        String path = "C:/zgh/code/my-compare/src";
+        String path = "C:/zgh/code/_ic_api/ic-coop-api/src";
         new FormatCode().format(new File(path));
         System.out.println("finished");
     }
@@ -38,15 +38,24 @@ public class FormatCode {
     private void handleOne(File file) {
         String ext = file.getName().substring(file.getName().lastIndexOf(".") + 1);
         if(set.contains(ext)) {
-            formatOne(file);
+            formatOne(file, ext);
         }
     }
 
-    private void formatOne(File file) {
+    private void formatOne(File file, String ext) {
         String content = read(file);
         content = replace(content, "[^ ][ ],", " ,", ","); // xxx ,
         content = replace(content, ",[A-Za-z0-9\\(]", ",", ", ");// ,xxx
         content = replace(content, "[^ \"] \\)", " )", ")"); // xxx )
+        content = replace(content, "[^ -]->", "->", " ->"); // xxx->
+        content = replace(content, "[^-]->[^ ]", "->", "-> "); // ->xxx
+        content = replace(content, "[^ ]!=", "!=", " !="); //
+        content = replace(content, "!=[^ ]", "!=", "!= "); //
+        content = replace(content, "[^ ]==", "==", " =="); //
+        content = replace(content, "==[^ ]", "==", "== "); //
+        content = replace(content, "[A-za-z0-9\")]\\+[^+]", "+", " +"); // xxx+
+        content = replace(content, "\\+[A-za-z0-9\"(]", "+", "+ "); // +xxx
+        content = content.replace("GMT + 8", "GMT+8");
         content = content.replace(",  ", ", ");
         content = content.replace("if(", "if (");
         content = content.replace("for(", "for (");
@@ -55,6 +64,11 @@ public class FormatCode {
         content = content.replace("}else", "} else");
         content = content.replace("else{", "else {");
         content = content.replace("=  ", "= ");
+        if ("java".equals(ext)) {
+            content = content.replace("	", "    ");
+        } else if("vue".equals(ext) || "js".equals(ext)) {
+            content = content.replace("	", "  ");
+        }
         write(file, content);
     }
 
