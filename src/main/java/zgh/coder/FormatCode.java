@@ -10,15 +10,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FormatCode {
+    String PATH = "C:/zgh/code/kc-demo-api/src";
 
 	public static void main(String[] args) {
         new FormatCode().process();
     }
 
     private void process() {
-        // String path = "C:/zgh/code/ms-recognize/src/main/java/com/hnkc/recognize/frame/tool/HttpTool.java";
-        String path = "C:/zgh/code/kc-demo-api/src";
-        int num = format(new File(path));
+        int num = format(new File(PATH));
         System.out.println("finished, handled " + num + " files");
     }
 
