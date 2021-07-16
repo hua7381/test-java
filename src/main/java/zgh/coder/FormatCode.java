@@ -12,9 +12,14 @@ import java.util.regex.Pattern;
 public class FormatCode {
 
 	public static void main(String[] args) {
-        String path = "C:/zgh/code/_ic_api/ic-coop-api/src";
-        new FormatCode().format(new File(path));
-        System.out.println("finished");
+        new FormatCode().process();
+    }
+
+    private void process() {
+        // String path = "C:/zgh/code/ms-recognize/src/main/java/com/hnkc/recognize/frame/tool/HttpTool.java";
+        String path = "C:/zgh/code/kc-demo-api/src";
+        int num = format(new File(path));
+        System.out.println("finished, handled " + num + " files");
     }
 
     private static Set<String> set = new HashSet<String>();
@@ -25,14 +30,17 @@ public class FormatCode {
         set.add("js");
     }
 
-    private void format(File file) {
+    private int format(File file) {
+        int num = 0;
         if (file.isDirectory()) {
             for(File f : file.listFiles()) {
-                format(f);
+                num += format(f);
             }
         } else {
             handleOne(file);
+            num = 1;
         }
+        return num;
     }
 
     private void handleOne(File file) {
@@ -51,8 +59,6 @@ public class FormatCode {
         content = replace(content, "[^-]->[^ ]", "->", "-> "); // ->xxx
         content = replace(content, "[^ ]!=", "!=", " !="); //
         content = replace(content, "!=[^ ]", "!=", "!= "); //
-        content = replace(content, "[^ ]==", "==", " =="); //
-        content = replace(content, "==[^ ]", "==", "== "); //
         content = replace(content, "[A-za-z0-9\")]\\+[^+]", "+", " +"); // xxx+
         content = replace(content, "\\+[A-za-z0-9\"(]", "+", "+ "); // +xxx
         content = content.replace("GMT + 8", "GMT+8");
@@ -64,6 +70,9 @@ public class FormatCode {
         content = content.replace("}else", "} else");
         content = content.replace("else{", "else {");
         content = content.replace("=  ", "= ");
+        content = content.replace("\r\n     * \r\n", "\r\n");
+        content = content.replace("\r\n * \r\n", "\r\n");
+        content = content.replace("\r\n\r\n\r\n", "\r\n\r\n");
         if ("java".equals(ext)) {
             content = content.replace("	", "    ");
         } else if("vue".equals(ext) || "js".equals(ext)) {
