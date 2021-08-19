@@ -10,9 +10,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FormatCode {
-    String PATH = "C:/zgh/code/ms-login2-api";
+    String PATH = "C:/zgh/code/test-java";
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
         new FormatCode().process();
     }
 
@@ -32,7 +32,7 @@ public class FormatCode {
     private int format(File file) {
         int num = 0;
         if (file.isDirectory()) {
-            for(File f : file.listFiles()) {
+            for (File f : file.listFiles()) {
                 num += format(f);
             }
         } else {
@@ -44,7 +44,7 @@ public class FormatCode {
 
     private void handleOne(File file) {
         String ext = file.getName().substring(file.getName().lastIndexOf(".") + 1);
-        if(set.contains(ext)) {
+        if (set.contains(ext)) {
             formatOne(file, ext);
         }
     }
@@ -77,12 +77,12 @@ public class FormatCode {
         Set<String> set = new HashSet<String>();
         while(matcher.find()) {
             String str = matcher.group();
-            if(!set.contains(str)) {
+            if (!set.contains(str)) {
                 set.add(str);
             }
         }
 
-        for(String str : set) {
+        for (String str : set) {
             content = content.replace(str, str.replace(replaceFrom, replaceTo));
         }
         
@@ -102,22 +102,22 @@ public class FormatCode {
             e.printStackTrace();
         }
         return null;
-	}
+    }
 
-	public void write(File file, String content) {
+    public void write(File file, String content) {
         FileWriter writer = null;
         try {
             writer = new FileWriter(file);
-			writer.write(content);
-		} catch(Exception e) {
+            writer.write(content);
+        } catch(Exception e) {
             e.printStackTrace();
         } finally {
-			try {
+            try {
                 writer.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-		}
-	}
+        }
+    }
 
 }

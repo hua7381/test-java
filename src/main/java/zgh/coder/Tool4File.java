@@ -9,20 +9,20 @@ public class Tool4File {
 
   private long num = 0L;
 
-	public void del(File file) {
-		if(file.isDirectory() && file.listFiles().length > 0) {
-			for(File sub : file.listFiles()) {
+    public void del(File file) {
+        if (file.isDirectory() && file.listFiles().length > 0) {
+            for (File sub : file.listFiles()) {
         del(sub);
-			}
-		}
-		try {
+            }
+        }
+        try {
       file.delete();
       num ++;
-      if(num % 1000 == 0) {
+      if (num % 1000 == 0) {
         System.out.println("delted: "+num+" files, now: "+file.getPath());
       }
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
     }
   }
 

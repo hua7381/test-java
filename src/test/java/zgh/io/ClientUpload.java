@@ -82,7 +82,7 @@ public class ClientUpload {
             sb.append(boundaryPrefix);
             sb.append(BOUNDARY);
             sb.append(newLine);
-            // 文件参数,photo参数名可以随意修改
+            // 文件参数, photo参数名可以随意修改
             sb.append("Content-Disposition: form-data;name=\"file\";filename=\"" + file.getName() + "\"" + newLine);
             sb.append("Content-Type:application/octet-stream");
             // 参数头设置完以后需要两个换行，然后才是参数内容

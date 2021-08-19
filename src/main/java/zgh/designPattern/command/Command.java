@@ -1,5 +1,5 @@
 package zgh.designPattern.command;
 
 public interface Command {
-	public void excute();
+    public void excute();
 }
