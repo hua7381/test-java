@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FormatCode {
-    String PATH = "C:/zgh/code/kc-demo-api/src";
+    String PATH = "C:/zgh/code/ms-login2-api";
 
 	public static void main(String[] args) {
         new FormatCode().process();
@@ -51,27 +51,18 @@ public class FormatCode {
 
     private void formatOne(File file, String ext) {
         String content = read(file);
-        content = replace(content, "[^ ][ ],", " ,", ","); // xxx ,
-        content = replace(content, ",[A-Za-z0-9\\(]", ",", ", ");// ,xxx
-        content = replace(content, "[^ \"] \\)", " )", ")"); // xxx )
-        content = replace(content, "[^ -]->", "->", " ->"); // xxx->
-        content = replace(content, "[^-]->[^ ]", "->", "-> "); // ->xxx
-        content = replace(content, "[^ ]!=", "!=", " !="); //
-        content = replace(content, "!=[^ ]", "!=", "!= "); //
-        content = replace(content, "[A-za-z0-9\")]\\+[^+]", "+", " +"); // xxx+
-        content = replace(content, "\\+[A-za-z0-9\"(]", "+", "+ "); // +xxx
-        content = content.replace("GMT + 8", "GMT+8");
+
         content = content.replace(",  ", ", ");
+        content = replaceByReg(content, "[^ ][ ],", " ,", ","); // xxx ,
+        content = replaceByReg(content, ",[A-Za-z0-9\\(]", ",", ", ");// ,xxx
+
+        content = replaceByReg(content, "[^ \"] \\)", " )", ")"); // xxx )
+
         content = content.replace("if(", "if (");
         content = content.replace("for(", "for (");
-        content = content.replace("( ", "(");
         content = content.replace("){", ") {");
         content = content.replace("}else", "} else");
         content = content.replace("else{", "else {");
-        content = content.replace("=  ", "= ");
-        content = content.replace("\r\n     * \r\n", "\r\n");
-        content = content.replace("\r\n * \r\n", "\r\n");
-        content = content.replace("\r\n\r\n\r\n", "\r\n\r\n");
         if ("java".equals(ext)) {
             content = content.replace("	", "    ");
         } else if("vue".equals(ext) || "js".equals(ext)) {
@@ -80,7 +71,7 @@ public class FormatCode {
         write(file, content);
     }
 
-    private String replace(String content, String reg, String replaceFrom, String replaceTo) {
+    private String replaceByReg(String content, String reg, String replaceFrom, String replaceTo) {
         Matcher matcher = Pattern.compile(reg).matcher(content);
 
         Set<String> set = new HashSet<String>();
