@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,7 +14,13 @@ public class FormatCode {
     String PATH = "C:/zgh/code/test-java";
 
     public static void main(String[] args) {
-        new FormatCode().process();
+        System.out.println("begin");
+        Scanner scanner = new Scanner(System.in);
+        String ipt = scanner.next();
+        System.out.println(ipt);
+        scanner.close();
+        // new FormatCode().process();
+        System.out.println("end");
     }
 
     private void process() {
