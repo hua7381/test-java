@@ -1,11 +1,9 @@
 package zgh.coder;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+
+import zgh.util.FileUtil;
 
 /**
  * CopyCode
@@ -88,14 +86,14 @@ public class CopyProject {
             copyDir(sourceDir+"/src", targetDir+"/src");
             copyDir(sourceDir+"/public", targetDir+"/public");
 
-            copyFile(new File(sourceDir+"/pom.xml"), new File(targetDir+"/pom.xml"));
-            copyFile(new File(sourceDir+"/README.md"), new File(targetDir+"/README.md"));
+            FileUtil.copyFile(new File(sourceDir+"/pom.xml"), new File(targetDir+"/pom.xml"));
+            FileUtil.copyFile(new File(sourceDir+"/README.md"), new File(targetDir+"/README.md"));
             
-            copyFile(new File(sourceDir+"/babel.config.js"), new File(targetDir+"/babel.config.js"));
-            copyFile(new File(sourceDir+"/package.json"), new File(targetDir+"/package.json"));
-            copyFile(new File(sourceDir+"/webpack.config.js"), new File(targetDir+"/webpack.config.js"));
-            copyFile(new File(sourceDir+"/vue.config.js"), new File(targetDir+"/vue.config.js"));
-            copyFile(new File(sourceDir+"/yarn.lock"), new File(targetDir+"/yarn.lock"));
+            FileUtil.copyFile(new File(sourceDir+"/babel.config.js"), new File(targetDir+"/babel.config.js"));
+            FileUtil.copyFile(new File(sourceDir+"/package.json"), new File(targetDir+"/package.json"));
+            FileUtil.copyFile(new File(sourceDir+"/webpack.config.js"), new File(targetDir+"/webpack.config.js"));
+            FileUtil.copyFile(new File(sourceDir+"/vue.config.js"), new File(targetDir+"/vue.config.js"));
+            FileUtil.copyFile(new File(sourceDir+"/yarn.lock"), new File(targetDir+"/yarn.lock"));
 
             System.out.println("ok");
         } catch (Exception e) {
@@ -120,7 +118,7 @@ public class CopyProject {
                 File sourceFile = files[i];
                 // 目标文件
                 File targetFile = new File(new File(targetDir).getAbsolutePath() + File.separator + files[i].getName());
-                copyFile(sourceFile, targetFile);
+                FileUtil.copyFile(sourceFile, targetFile);
             }
             if (files[i].isDirectory()) {
                 // 准备复制的源文件夹
@@ -130,35 +128,6 @@ public class CopyProject {
                 copyDir(dir1, dir2);
             }
         }
-    }
-
-    private void copyFile(File sourceFile, File targetFile) throws IOException {
-        if (!sourceFile.exists()) {
-            return;
-        }
-        // 新建文件输入流并对它进行缓冲
-        FileInputStream input = new FileInputStream(sourceFile);
-        BufferedInputStream inBuff = new BufferedInputStream(input);
-
-        // 新建文件输出流并对它进行缓冲
-        FileOutputStream output = new FileOutputStream(targetFile);
-        BufferedOutputStream outBuff = new BufferedOutputStream(output);
-
-        // 缓冲数组
-        byte[] b = new byte[1024 * 5];
-        int len;
-        while ((len = inBuff.read(b)) != -1) {
-            outBuff.write(b, 0, len);
-        }
-
-        // 刷新此缓冲的输出流
-        outBuff.flush();
-
-        // 关闭流
-        inBuff.close();
-        outBuff.close();
-        output.close();
-        input.close();
     }
 
 }
