@@ -10,9 +10,9 @@ import zgh.util.FileUtil;
  */
 public class CopyRawByJpg {
 
-  private static String JPG_DIR = "C:/zgh/photo/t/choose";
-  private static String TAR_DIR = "C:/zgh/photo/t/choose";
-  private static String RAW_DIR = "D:/DCIM/101CANON";
+  private static String JPG_DIR = "C:/t";
+  private static String TAR_DIR = "C:/t";
+  private static String RAW_DIR = "c:/zgh/photo/camera";
 
   public static void main(String[] args) {
     System.out.println("start");
