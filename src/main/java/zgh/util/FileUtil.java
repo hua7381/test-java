@@ -65,6 +65,9 @@ public class FileUtil {
 
     public static String fileToBase64(String filePath) {
         File file = new File(filePath);
+        if (!file.exists()) {
+            throw new IllegalArgumentException("文件不存在");
+        }
         try {
             FileInputStream fis = new FileInputStream(file);
             ByteArrayOutputStream bos = new ByteArrayOutputStream(1000);

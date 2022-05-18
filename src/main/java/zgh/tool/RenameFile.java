@@ -2,14 +2,20 @@ package zgh.tool;
 
 import java.io.File;
 
+/**
+ * 批量重命名
+ */
 public class RenameFile {
     
     public static void main(String[] args) {
-        new RenameFile().handle();
+        handle();
     }
 
-    private void handle() {
+    private static void handle() {
+        // 目录
         String strDir = "C:/zgh/photo/raw/2";
+
+        // 规则
         String prefix = "";
         String suffix = "";
         String replace = "2_IMG";
