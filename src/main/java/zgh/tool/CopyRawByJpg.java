@@ -33,11 +33,7 @@ public class CopyRawByJpg {
       File tar = new File(TAR_DIR + "/" + newName);
       if (raw.exists() && !tar.exists()) {
         System.out.println("copy to " + tar.getPath());
-        try {
-          FileUtil.copyFile(raw, tar);
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
+        FileUtil.copyFile(raw, tar);
         System.out.println("ok");
       }
     }

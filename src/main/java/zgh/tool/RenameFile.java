@@ -9,11 +9,11 @@ public class RenameFile {
     }
 
     private void handle() {
-        String strDir = "c:/t/rename";
+        String strDir = "C:/zgh/photo/raw/2";
         String prefix = "";
-        String suffix = ".jpg";
-        String replace = ".jfif";
-        String replaceTo = "";
+        String suffix = "";
+        String replace = "2_IMG";
+        String replaceTo = "IMG";
 
         File dir = new File(strDir);
         if (dir.isDirectory()) {
