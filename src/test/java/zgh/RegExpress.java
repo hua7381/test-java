@@ -15,4 +15,12 @@ public class RegExpress {
         System.out.println(Pattern.matches(regex, "湘AH阿斯蒂芬945Z"));
     }
 
+    @Test
+    public void test2() {
+        String reg = "((127.0)|(172)|(192.168)).\\S*";
+        String str = "127.0.0.1";
+        Boolean res = Pattern.matches(reg, str);
+        System.out.println(res);
+    }
+
 }
