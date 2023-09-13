@@ -30,72 +30,30 @@ import zgh.lucene.bean.Page;
 
 public class TestLucene {
     private static final String dir = "C:/zgh/test/lucene";
-
-    public static void main(String[] args) {
-        try {
-            createData();
-            search1();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    // private static final String dir = "C:/zgh/test/addr_05";
     
     private static final String DATA = "["
-    + "{id:'a001', deptNo: '430101000000', pinyin: 'zhangsan', sj:'2017-05-01 08:27:29', age:'21', name:'张三', addr:'湖南省长沙市望城区银星路555号'},"
-    + "{id:'a002', deptNo: '430101000000', pinyin: 'lisi', sj:'2017-05-02 08:18:29', age:'18', name:'李四', addr:'北京市长安街天安门'},"
-    + "{id:'a003', deptNo: '430102000000', pinyin: 'wangwu', sj:'2017-05-02 10:24:50', age:'31', name:'王五', addr:'湖南省长沙市岳麓区尖山路中电软件园6栋'},"
-    + "{id:'a004', deptNo: '430102000000', pinyin: 'zhaoliu', sj:'2017-05-03 17:07:26', age:'16', name:'赵六', addr:'湖南省长沙市岳麓区尖山路中电软件园7栋'},"
-    + "{id:'a005', deptNo: '430102000000', pinyin: 'zhanggong', sj:'2017-05-04 11:29:53', age:'27', name:'张工', addr:'湖南省长沙市岳麓区尖山路中电软件园8栋'},"
-    + "{id:'a006', deptNo: '430102000000', pinyin: 'qtlsjd', sj:'2017-05-04 11:29:53', age:'27', name:'七天连锁酒店', addr:'湖南省长沙市岳麓区尖山路中电软件园8栋'},"
-    + "{id:'a007', deptNo: '430102000000', pinyin: 'csbjlsjd', sj:'2017-05-04 11:29:53', age:'27', name:'城市便捷连锁酒店', addr:'湖南省长沙市岳麓区尖山路中电软件园8栋'},"
+    + "{district: '望城区', name:'长沙市公安局望城分局交通警察大队', addr:'长沙市望城区雷锋大道'},"
+    + "{district: '望城区', name:'大泽湖派出所', addr:'长沙市望城区雷锋大道旁'},"
     + "]";
-
-    // 字母的通配符查询
-    public static void search1() throws Exception {
-        Query q = new WildcardQuery(new Term("pinyin", "*lsjd*"));
-        show(LuceneUtil.query(dir, q));
-    }
-
-    // 数字的通配符查询
-    public static void search2() throws Exception {
-        Query q = new WildcardQuery(new Term("deptNo", "430101*"));
-        show(LuceneUtil.query(dir, q));
-    }
-    
-    //分词查询
-    public static void search3() throws Exception {
-        Query q = new QueryParser(Version.LUCENE_30, "addr", new StandardAnalyzer(Version.LUCENE_30)).parse("岳麓区");
-
-        // PhraseQuery q = new PhraseQuery();
-        // q.add(new Term("addr", "岳麓区"));
-
-        // Query q = new WildcardQuery(new Term("addr", "*岳麓区*"));
-        show(LuceneUtil.query(dir, q));
-    }
     
     @Test
-    public static void createData() throws Exception {
+    public void createData() throws Exception {
         IndexWriter writer = null;
         try {
             writer = LuceneUtil.getWriter(dir);
             List<Map> list = JSON.parseArray(DATA, Map.class);
-            
             for (Map<String, String> one : list) {
                 Document doc = new Document();
-                doc.add(new Field("id", one.get("id"), Field.Store.YES, Field.Index.NOT_ANALYZED));
-                doc.add(new Field("deptNo", one.get("deptNo"), Field.Store.YES, Field.Index.NOT_ANALYZED));
-                doc.add(new Field("pinyin", one.get("pinyin"), Field.Store.YES, Field.Index.NOT_ANALYZED));
-                doc.add(new Field("sj", one.get("sj"), Field.Store.YES, Field.Index.NOT_ANALYZED));
                 doc.add(new Field("name", one.get("name"), Field.Store.YES, Field.Index.NOT_ANALYZED));
-                doc.add(new Field("age", one.get("age"), Field.Store.YES, Field.Index.NOT_ANALYZED));
-                doc.add(new Field("addr", one.get("addr"), Field.Store.YES, Field.Index.ANALYZED));
-                
-                boolean exist = LuceneUtil.query(dir, new TermQuery(new Term("id", one.get("id")))).size() > 0;
+                doc.add(new Field("addr", one.get("addr"), Field.Store.YES, Field.Index.NOT_ANALYZED));
+                doc.add(new Field("fulltext", one.get("district") + one.get("name") + one.get("addr"), Field.Store.YES, Field.Index.NOT_ANALYZED));
+                boolean exist = LuceneUtil.query(dir, new TermQuery(new Term("name", one.get("name")))).size() > 0;
                 if (!exist) {
                     writer.addDocument(doc);
                     System.out.println("added");
                 } else {
-                    writer.updateDocument(new Term("id", one.get("id")), doc);
+                    writer.updateDocument(new Term("name", one.get("name")), doc);
                     System.out.println("updated");
                 }
             }
@@ -105,6 +63,48 @@ public class TestLucene {
         }
     }
     
+    @Test
+    public void search01() throws Exception {
+        long t1 = System.currentTimeMillis();
+        String keyword = "望城区交警大队";
+        
+        StringBuffer sb = new StringBuffer();
+        for (int i=0 ; i<keyword.length(); i++) {
+            sb.append("*" + keyword.charAt(i));
+        }
+        sb.append("*");
+        
+        Query q = new WildcardQuery(new Term("fulltext", sb.toString()));
+        show(LuceneUtil.query(dir, q));
+        long t2 = System.currentTimeMillis();
+        System.out.println("cost " + (t2 - t1) + " ms");
+    }
+    
+    // 字母的通配符查询
+    @Test
+    public void search1() throws Exception {
+        Query q = new WildcardQuery(new Term("pinyin", "*lsjd*"));
+        show(LuceneUtil.query(dir, q));
+    }
+
+    // 数字的通配符查询
+    @Test
+    public void search2() throws Exception {
+        Query q = new WildcardQuery(new Term("deptNo", "430101*"));
+        show(LuceneUtil.query(dir, q));
+    }
+    
+    //分词查询
+    @Test
+    public void search3() throws Exception {
+        Query q = new QueryParser(Version.LUCENE_30, "addr", new StandardAnalyzer(Version.LUCENE_30)).parse("岳麓区");
+        // PhraseQuery q = new PhraseQuery();
+        // q.add(new Term("addr", "岳麓区"));
+
+        // Query q = new WildcardQuery(new Term("addr", "*岳麓区*"));
+        show(LuceneUtil.query(dir, q));
+    }
+
     @Test
     public void fn2() throws Exception {
         //term查询

@@ -17,8 +17,8 @@ import org.apache.commons.lang3.StringUtils;
  * 照片批处理：按拍摄时间改名
  */
 public class PhotoRenamer {
-    static String srcDir = "c:/t/from";
-    static String destDir = "c:/t/to";
+    static String srcDir = "c:/t/rename_from";
+    static String destDir = "c:/t/rename_to";
 
     public static void main(String[] args) {
         new File(destDir).mkdirs();
