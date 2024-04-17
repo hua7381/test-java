@@ -39,4 +39,14 @@ public class RegExpress {
         System.out.println(Pattern.matches(".*(路|道|街|巷)\\d*号.*", "玉兰路148号"));
     }
 
+    @Test
+    public void test5() {
+        System.out.println(Pattern.matches(".*\\d$", "广东省人民医院门诊住院楼眼科579"));
+        System.out.println(Pattern.matches(".*\\d$", "广东省人民医院门诊住院楼眼科"));
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Pattern.matches(".*\\d*", "广东省人民医院门诊住院楼眼科579"));
+    }
+
 }

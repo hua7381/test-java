@@ -10,7 +10,7 @@ public class Jasypt {
 
     public static void main(String[] args) {
         String key = "hnkc";
-        String str = "gzznjcj20396";
+        String str = "gzznjcj16082";
 
         String secret = Jasypt.encrypt(key, str);
         String ori = Jasypt.decrypt(key, secret);
@@ -18,6 +18,8 @@ public class Jasypt {
         System.out.println("str: " + str);
         System.out.println("secret: " + secret);
         System.out.println("ori: " + ori);
+
+        System.out.println(decrypt("hnkc", "y1yZXlrGW7LcfzGOsmKpOqftX10o8muM"));
     }
 
     public static String encrypt(String key, String str) {
